@@ -161,7 +161,7 @@
 
       const file = $("pdfIn")?.files?.[0] || null;
       if (!file) {
-        setStatus("Please select a PDF file.", "warn");
+        setStatus("Please select a file.", "warn");
         return;
       }
       setStatus("PDF selected. Enter a page (5) or range (2-4), then click Start.", "info");
@@ -178,7 +178,7 @@
     mustGet("removeRange").addEventListener("input", () => {
       updateStartButtonLabel();
       if (!$("pdfIn")?.files?.length) setStatus("Please select a PDF file first.", "warn");
-      else setStatus("Ready. Click Start to remove that page/range.", "info");
+      else setStatus("Select a file and page range for removal.", "info");
     });
 
     mustGet("startBtn").addEventListener("click", async () => {
