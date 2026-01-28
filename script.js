@@ -21,13 +21,25 @@
     return el;
   }
 
+  // Accepts: "5" or "2-4"
   function parseRange(rangeStr, totalPages) {
     const s = String(rangeStr || "").trim();
-    const m = s.match(/^(\d+)\s*-\s*(\d+)$/);
-    if (!m) throw new Error("Range must look like 2-4");
+    if (!s) throw new Error("Enter a page number (e.g., 5) or a range (e.g., 2-4)");
 
-    let start = parseInt(m[1], 10);
-    let end = parseInt(m[2], 10);
+    let start, end;
+
+    // Single page: "5"
+    let m = s.match(/^(\d+)$/);
+    if (m) {
+      start = parseInt(m[1], 10);
+      end = start;
+    } else {
+      // Range: "2-4"
+      m = s.match(/^(\d+)\s*-\s*(\d+)$/);
+      if (!m) throw new Error("Range must look like 5 or 2-4");
+      start = parseInt(m[1], 10);
+      end = parseInt(m[2], 10);
+    }
 
     if (!Number.isFinite(start) || !Number.isFinite(end)) throw new Error("Range numbers invalid");
     if (start < 1 || end < 1) throw new Error("Pages start at 1");
@@ -61,28 +73,26 @@
 
   function updateStartButtonLabel() {
     const btn = $("startBtn");
-    const rangeStr = $("removeRange")?.value || "";
-    const trimmed = rangeStr.trim();
+    const raw = ($("removeRange")?.value || "").trim();
 
-    if (!trimmed) {
+    if (!raw) {
       btn.textContent = "Start";
       return;
     }
 
-    // Show a friendly label even before we know total pages
-    const m = trimmed.match(/^(\d+)\s*-\s*(\d+)$/);
-    if (!m) {
-      btn.textContent = "Start";
-      return;
-    }
-    btn.textContent = `Start (Remove pages ${m[1]}–${m[2]})`;
+    const single = raw.match(/^(\d+)$/);
+    const range = raw.match(/^(\d+)\s*-\s*(\d+)$/);
+
+    if (single) btn.textContent = `Start (Remove page ${single[1]})`;
+    else if (range) btn.textContent = `Start (Remove pages ${range[1]}–${range[2]})`;
+    else btn.textContent = "Start";
   }
 
   async function loadTotalPages(file) {
     const { PDFDocument } = window.PDFLib;
     const buf = await file.arrayBuffer();
     const doc = await PDFDocument.load(buf);
-    return doc.getPageCount();
+    return doc.getPageCount(); // pdf-lib getPageCount() [web:406]
   }
 
   async function processSplit() {
@@ -102,17 +112,17 @@
 
     const range = parseRange($("removeRange").value, total);
 
-    // Build extracted doc (removed pages)
-    setStatus(`Extracting pages ${range.start}–${range.end}…`, "info");
+    // Extracted doc (removed pages)
+    setStatus(`Extracting page(s) ${range.start}–${range.end}…`, "info");
     const extractedDoc = await PDFDocument.create();
     const extractedIdx = [];
     for (let p = range.start; p <= range.end; p++) extractedIdx.push(p - 1);
 
-    const extractedPages = await extractedDoc.copyPages(srcDoc, extractedIdx); // copyPages is the standard pdf-lib approach [web:392]
+    const extractedPages = await extractedDoc.copyPages(srcDoc, extractedIdx); // copyPages workflow [web:392]
     extractedPages.forEach((pg) => extractedDoc.addPage(pg));
     const extractedBytes = await extractedDoc.save();
 
-    // Build remaining doc (everything except removed range)
+    // Remaining doc (everything except removed range)
     setStatus("Building remaining PDF…", "info");
     const remainingDoc = await PDFDocument.create();
     const keepIdx = [];
@@ -121,7 +131,7 @@
       if (pageNum < range.start || pageNum > range.end) keepIdx.push(i);
     }
 
-    const keepPages = await remainingDoc.copyPages(srcDoc, keepIdx); // copyPages usage [web:392]
+    const keepPages = await remainingDoc.copyPages(srcDoc, keepIdx); // copyPages workflow [web:392]
     keepPages.forEach((pg) => remainingDoc.addPage(pg));
     const remainingBytes = await remainingDoc.save();
 
@@ -154,7 +164,7 @@
         setStatus("Please select a PDF file.", "warn");
         return;
       }
-      setStatus("PDF selected. Enter a range like 2-4, then click Start.", "info");
+      setStatus("PDF selected. Enter a page (5) or range (2-4), then click Start.", "info");
 
       try {
         const total = await loadTotalPages(file);
@@ -167,11 +177,8 @@
 
     mustGet("removeRange").addEventListener("input", () => {
       updateStartButtonLabel();
-      if (!$("pdfIn")?.files?.length) {
-        setStatus("Please select a PDF file first.", "warn");
-      } else {
-        setStatus("Ready. Click Start to remove that range.", "info");
-      }
+      if (!$("pdfIn")?.files?.length) setStatus("Please select a PDF file first.", "warn");
+      else setStatus("Ready. Click Start to remove that page/range.", "info");
     });
 
     mustGet("startBtn").addEventListener("click", async () => {
@@ -203,7 +210,7 @@
     });
 
     updateStartButtonLabel();
-    setStatus("Ready. Select a PDF, enter a range like 2-4.", "info");
+    setStatus("Ready. Select a PDF, enter a page (5) or range (2-4).", "info");
     log("Split script loaded.");
   }
 
