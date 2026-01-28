@@ -24,7 +24,7 @@
   // Accepts: "5" or "2-4"
   function parseRange(rangeStr, totalPages) {
     const s = String(rangeStr || "").trim();
-    if (!s) throw new Error("Enter a page number (e.g., 5) or a range (e.g., 2-4)");
+    if (!s) throw new Error("That's not a valid entry. Type a number (e.g. 5), or a range (e.g. 2-4).");
 
     let start, end;
 
@@ -36,15 +36,15 @@
     } else {
       // Range: "2-4"
       m = s.match(/^(\d+)\s*-\s*(\d+)$/);
-      if (!m) throw new Error("Range must look like 5 or 2-4");
+      if (!m) throw new Error("That's not a valid entry. Type a number (e.g. 5), or a range (e.g. 2-4).");
       start = parseInt(m[1], 10);
       end = parseInt(m[2], 10);
     }
 
     if (!Number.isFinite(start) || !Number.isFinite(end)) throw new Error("Range numbers invalid");
-    if (start < 1 || end < 1) throw new Error("Pages start at 1");
+    if (start < 1 || end < 1) throw new Error("You can't remove Page 0, that doesn't make any sense.");
     if (start > end) throw new Error("Start must be <= end");
-    if (totalPages && end > totalPages) throw new Error(`End page exceeds document length (${totalPages})`);
+    if (totalPages && end > totalPages) throw new Error(`End page exceeds document length. (${totalPages})`);
 
     return { start, end };
   }
@@ -147,7 +147,7 @@
     $("downloadExtractedBtn").disabled = false;
 
     setStatus(
-      `Done.\nTotal pages: ${total}\nRemoved: ${range.start}-${range.end}\nRemaining pages: ${total - extractedIdx.length}`,
+      `Done.\nTotal Pages: ${total}\nRemoved Pages: pg.${range.start} - pg. ${range.end}\nRemaining Pages: ${total - extractedIdx.length}`,
       "info"
     );
   }
