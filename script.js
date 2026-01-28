@@ -211,7 +211,6 @@
 
     updateStartButtonLabel();
     setStatus("Select a file and page range for removal.", "info");
-    log("Split script loaded.");
   }
 
   document.addEventListener("DOMContentLoaded", bindEvents);
