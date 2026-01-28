@@ -84,7 +84,7 @@
     const range = raw.match(/^(\d+)\s*-\s*(\d+)$/);
 
     if (single) btn.textContent = `Start (Remove page ${single[1]})`;
-    else if (range) btn.textContent = `Start (Remove pages ${range[1]}–${range[2]})`;
+    else if (range) btn.textContent = `Start (Remove Pages ${range[1]}–${range[2]})`;
     else btn.textContent = "Start";
   }
 
@@ -147,7 +147,7 @@
     $("downloadExtractedBtn").disabled = false;
 
     setStatus(
-      `Done.\nTotal Pages: ${total}\nRemoved Pages: pg.${range.start} - pg. ${range.end}\nRemaining Pages: ${total - extractedIdx.length}`,
+      `Done.\nTotal Pages: ${total}\nRemoved Pages: ${range.start}-${range.end}\nRemaining Pages: ${total - extractedIdx.length}`,
       "info"
     );
   }
