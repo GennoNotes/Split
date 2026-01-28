@@ -210,7 +210,7 @@
     });
 
     updateStartButtonLabel();
-    setStatus("Ready. Select a PDF, enter a page (5) or range (2-4).", "info");
+    setStatus("Select a file and page range for removal.", "info");
     log("Split script loaded.");
   }
 
