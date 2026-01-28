@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Split</title>
+  <title>GennoSplit</title>
 
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
@@ -67,7 +67,7 @@
     <a class="active" href="https://gennonotes.github.io/Split">Split</a>
   </div>
 
-  <h2>Split PDF (Remove range)</h2>
+  <h2>Split PDFs</h2>
 
   <div class="row">
     <div>
@@ -76,22 +76,22 @@
     </div>
 
     <div>
-      <label for="removeRange">Page range to remove</label>
+      <label for="removeRange">Removal Range:</label>
       <input type="text" id="removeRange" placeholder="e.g., 2-4" />
     </div>
 
     <button id="startBtn" class="primary">Start</button>
   </div>
 
-  <div class="row">
-    <button id="downloadRemainingBtn" class="primary" disabled>
-      Download remaining PDF
-    </button>
-
-    <button id="downloadExtractedBtn" class="primary" disabled>
-      Generate report (download extracted pages)
+  <button id="downloadExtractedBtn" class="primary" disabled>
+      Download Extracted Pages
     </button>
   </div>
+
+    <div class="row">
+    <button id="downloadRemainingBtn" class="primary" disabled>
+      Download Remaining Pages
+    </button>
 
   <div id="statusBox" class="info">Ready.</div>
   <div id="log"></div>
