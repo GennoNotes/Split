@@ -83,8 +83,8 @@
     const single = raw.match(/^(\d+)$/);
     const range = raw.match(/^(\d+)\s*-\s*(\d+)$/);
 
-    if (single) btn.textContent = `Start (Remove page ${single[1]})`;
-    else if (range) btn.textContent = `Start \n(Split Pages ${range[1]}–${range[2]})`;
+    if (single) btn.textContent = `Start (Split Page ${single[1]})`;
+    else if (range) btn.textContent = `Start (Split Pages ${range[1]}–${range[2]})`;
     else btn.textContent = "Start";
   }
 
