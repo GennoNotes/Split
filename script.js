@@ -164,7 +164,7 @@
         setStatus("Please select a file.", "warn");
         return;
       }
-      setStatus("PDF selected. Enter a page (5) or range (2-4), then click Start.", "info");
+      setStatus("File loaded. Indicate a page range for removal.", "info");
 
       try {
         const total = await loadTotalPages(file);
