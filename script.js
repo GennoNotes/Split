@@ -197,7 +197,7 @@
         return;
       }
       const name = state.file.name.replace(/\.pdf$/i, "");
-      downloadBytes(state.remainingPdfBytes, `${name}-remaining.pdf`);
+      downloadBytes(state.remainingPdfBytes, `${name}-Split.pdf`);
     });
 
     mustGet("downloadExtractedBtn").addEventListener("click", () => {
@@ -206,7 +206,7 @@
         return;
       }
       const name = state.file.name.replace(/\.pdf$/i, "");
-      downloadBytes(state.extractedPdfBytes, `${name}-extracted-${state.range.start}-${state.range.end}.pdf`);
+      downloadBytes(state.extractedPdfBytes, `GennoSplit.pdf`);
     });
 
     updateStartButtonLabel();
