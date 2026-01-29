@@ -210,7 +210,7 @@
     });
 
     updateStartButtonLabel();
-    setStatus("Select a file and page range for removal.", "info");
+    setStatus("Press Start to begin split.", "info");
   }
 
   document.addEventListener("DOMContentLoaded", bindEvents);
