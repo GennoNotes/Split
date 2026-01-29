@@ -178,7 +178,7 @@
     mustGet("removeRange").addEventListener("input", () => {
       updateStartButtonLabel();
       if (!$("pdfIn")?.files?.length) setStatus("Please select a PDF file first.", "warn");
-      else setStatus("Select a file and page range for removal.", "warn");
+      else setStatus("Press Start to begin split.", "warn");
     });
 
     mustGet("startBtn").addEventListener("click", async () => {
@@ -210,7 +210,7 @@
     });
 
     updateStartButtonLabel();
-    setStatus("Press Start to begin split.", "info");
+    setStatus("Select a file and page range for removal.", "info");
   }
 
   document.addEventListener("DOMContentLoaded", bindEvents);
